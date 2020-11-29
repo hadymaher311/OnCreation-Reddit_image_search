@@ -25,7 +25,10 @@ class LoginController extends Controller
             'password' => 'required|min:8'
         ]);
         $credentials = $request->only('email', 'password');
-        if (Auth::guard('admin')->attempt($credentials)) {
+        if (Auth::guard('admin')->attempt(
+            $credentials,
+            $request->filled('remember')
+        )) {
             return redirect()->route('admin.dashboard');
         }
         return back()->withErrors(['These credentials do not match our records.']);
